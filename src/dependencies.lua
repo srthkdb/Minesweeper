@@ -1,0 +1,18 @@
+push = require 'lib/push'
+Class = require'lib/class'
+
+require 'src/constants'
+require 'src/StateMachine'
+require 'src/GameBoard'
+require 'src/PlayerBoard'
+require 'src/Util'
+require 'src/Tile'
+
+require 'src/states/BaseState'
+require 'src/states/PlayState'
+require 'src/states/GameOverState'
+require 'src/states/StartState'
+require 'src/states/SelectDifficultyState'
+require 'src/states/VictoryState'
+require 'src/states/ViewHighScoreState'
+require 'src/states/AddHighScoreState'
