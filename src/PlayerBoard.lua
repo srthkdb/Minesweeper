@@ -31,7 +31,11 @@ function PlayerBoard:update(dt)
 
     if love.keyboard.keysPressed['space'] then
         gSounds['wall-hit']:play()
-        self.board[self.currY][self.currX].code = -2
+        if self.board[self.currY][self.currX].code == 0 then
+            self.board[self.currY][self.currX].code = -2
+        elseif self.board[self.currY][self.currX].code == -2 then
+            self.board[self.currY][self.currX].code = 0
+        end
     end
 
     for i = 1, self.rows do

@@ -10,7 +10,7 @@ function VictoryState:update(dt)
 
     if love.keyboard.wasPressed('enter') or love.keyboard.wasPressed('return') then
         gStateMachine:change('play', {
-            level = max(3, self.difficulty + 1),
+            level = math.max(3, self.difficulty + 1),
             score = self.score,
             highscores = self.highscores
         })

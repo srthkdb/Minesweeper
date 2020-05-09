@@ -125,28 +125,32 @@ function PlayState:update(dt)
         local i = self.playerBoard.currY
         local j = self.playerBoard.currX
 
-        self.playerBoard.board[i][j]:hit()
-        if self.gameBoard.board[i][j] == 1 then
-            if self.first then
-                while self.gameBoard.board[i][j] == 1 do
-                    self.gameBoard:reset()
+        if self.playerBoard.board[i][j].code ~= -1 and self.playerBoard.board[i][j].code < 1 then
+
+            self.playerBoard.board[i][j]:hit()
+            if self.gameBoard.board[i][j] == 1 then
+                if self.first then
+                    while self.gameBoard.board[i][j] == 1 do
+                        self.gameBoard:reset()
+                    end
+                    self.vis = {}
+                    self:clickBoard(i, j)
+                    self.score = self:getScore()
+                    self:checkVictory()
+                else
+                    gStateMachine:change('game-over', {
+                        highscores = self.highscores,
+                        score = self.score,
+                        difficulty = self.difficulty
+                    })
                 end
+            else
                 self.vis = {}
                 self:clickBoard(i, j)
                 self.score = self:getScore()
                 self:checkVictory()
-            else
-                gStateMachine:change('game-over', {
-                    highscores = self.highscores,
-                    score = self.score,
-                    difficulty = self.difficulty
-                })
             end
-        else
-            self.vis = {}
-            self:clickBoard(i, j)
-            self.score = self:getScore()
-            self:checkVictory()
+
         end
 
         self.first = false
