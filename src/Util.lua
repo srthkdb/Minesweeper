@@ -29,3 +29,12 @@ function GenerateQuads(atlas, tileWidth, tileHeight)
 
     return spriteSheets
 end
+
+function find(table, value)
+    for k, val in pairs(table) do
+        if val.i == value.i and val.j == value.j then
+            return k
+        end
+    end
+    return nil
+end

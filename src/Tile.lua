@@ -12,9 +12,11 @@ function Tile:init(params)
     self.psystem:setAreaSpread('normal', 10, 10)
 
     self.color = params.color
+    self.i = params.i
+    self.j = params.j
 end
 
-function Tile:hit()
+function Tile:hit(ai)
     gSounds['brick-hit-1']:stop()
     gSounds['brick-hit-1']:play()
 

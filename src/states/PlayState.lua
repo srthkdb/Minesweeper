@@ -30,6 +30,8 @@ function PlayState:enter(params)
     self.playerBoard = PlayerBoard(self.rows, self.cols)
 
     self.first = true
+
+    self.ai = AI(self.rows, self.cols)
 end
 
 function PlayState:inRange(i, j)
@@ -68,11 +70,42 @@ function PlayState:countAdjacent(i, j)
     return cnt
 end
 
+function PlayState:make_move(i, j)
+    if self.playerBoard.board[i][j].code ~= -1 and self.playerBoard.board[i][j].code < 1 then
+
+        self.playerBoard.board[i][j]:hit()
+        if self.gameBoard.board[i][j] == 1 then
+            if self.first then
+                while self.gameBoard.board[i][j] == 1 do
+                    self.gameBoard:reset()
+                end
+                self.vis = {}
+                self:clickBoard(i, j)
+                self.score = self:getScore()
+                self:checkVictory()
+            else
+                gStateMachine:change('game-over', {
+                    highscores = self.highscores,
+                    score = self.score,
+                    difficulty = self.difficulty
+                })
+            end
+        else
+            self.vis = {}
+            self:clickBoard(i, j)
+            self.score = self:getScore()
+            self:checkVictory()
+        end
+
+    end
+end
+
 function PlayState:clickBoard(i, j)
     if self:inRange(i, j) and not self.vis[i + (j * self.cols)] then
         self.vis[i + j * self.cols] = true
         self.playerBoard.board[i][j]:hit()
         local adj = self:countAdjacent(i, j)
+        self.ai:add_knowledge({ i = i, j = j},  adj, self.playerBoard)
         if adj == 0 then
             self.playerBoard.board[i][j].code = -1
             if self:inRange(i+1, j) then
@@ -125,35 +158,19 @@ function PlayState:update(dt)
         local i = self.playerBoard.currY
         local j = self.playerBoard.currX
 
-        if self.playerBoard.board[i][j].code ~= -1 and self.playerBoard.board[i][j].code < 1 then
-
-            self.playerBoard.board[i][j]:hit()
-            if self.gameBoard.board[i][j] == 1 then
-                if self.first then
-                    while self.gameBoard.board[i][j] == 1 do
-                        self.gameBoard:reset()
-                    end
-                    self.vis = {}
-                    self:clickBoard(i, j)
-                    self.score = self:getScore()
-                    self:checkVictory()
-                else
-                    gStateMachine:change('game-over', {
-                        highscores = self.highscores,
-                        score = self.score,
-                        difficulty = self.difficulty
-                    })
-                end
-            else
-                self.vis = {}
-                self:clickBoard(i, j)
-                self.score = self:getScore()
-                self:checkVictory()
-            end
-
-        end
+        self:make_move(i, j)        
 
         self.first = false
+    end
+
+    if love.keyboard.wasPressed('a') then
+        local tile = self.ai:make_safe_move()
+        if tile == nil then
+            tile = self.ai:make_random_move(self.playerBoard)
+        end
+        print("ai move : "..tostring(tile.i).." "..tostring(tile.j))
+        self.ai:mark_mines(self.playerBoard)
+        self:make_move(tile.i, tile.j)
     end
 
     self.playerBoard:update(dt)

@@ -45,6 +45,10 @@ function SelectDifficultyState:render()
     love.graphics.setFont(gFonts['small'])
     love.graphics.printf("During gameplay, press enter to open a tile, space to flag, p to pause and arrow keys to move around.", 0, VIRTUAL_HEIGHT / 3 - 20,
         VIRTUAL_WIDTH, 'center')
+    love.graphics.setColor(0.8, 0.2, 0.2, 1)
+    love.graphics.printf("Press a for AI move!!", 0, VIRTUAL_HEIGHT / 3 + 20,
+        VIRTUAL_WIDTH, 'center')
+    love.graphics.setColor(1,1,1, 1)
     love.graphics.printf("(Press Enter to continue!)", 0, VIRTUAL_HEIGHT / 2 - 30,
         VIRTUAL_WIDTH, 'center')
 

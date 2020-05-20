@@ -7,6 +7,8 @@ WINDOW_HEIGHT = 1280
 TILE_WIDTH = 16
 TILE_HEIGHT = 16
 TILE_GAP = 1
+offSetX = 0
+offSetY = 0
 
 paletteColors = {
     -- blue

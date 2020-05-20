@@ -7,6 +7,8 @@ require 'src/GameBoard'
 require 'src/PlayerBoard'
 require 'src/Util'
 require 'src/Tile'
+require 'src/AI'
+require 'src/Sentence'
 
 require 'src/states/BaseState'
 require 'src/states/PlayState'
